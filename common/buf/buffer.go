@@ -310,7 +310,9 @@ func (b *Buffer) Leak() {
 		}
 		refs := b.refs.Load()
 		if refs == 0 {
-			panic("leaking buffer")
+			// In case of write errors, just release the buffer instead of panicking
+			b.Release()
+			return
 		} else {
 			panic(F.ToString("leaking buffer with ", refs, " references"))
 		}

@@ -174,7 +174,7 @@ func CopyExtendedWithPool(originSource io.Reader, destination N.ExtendedWriter, 
 		options.PostReturn(buffer)
 		err = destination.WriteBuffer(buffer)
 		if err != nil {
-			buffer.Leak()
+			buffer.Release()
 			if !notFirstTime {
 				err = N.ReportHandshakeFailure(originSource, err)
 			}
@@ -293,7 +293,7 @@ func CopyPacketWithPool(originSource N.PacketReader, destination N.PacketWriter,
 		options.PostReturn(buffer)
 		err = destination.WritePacket(buffer, destinationAddress)
 		if err != nil {
-			buffer.Leak()
+			buffer.Release()
 			if !notFirstTime {
 				err = N.ReportHandshakeFailure(originSource, err)
 			}
@@ -319,7 +319,7 @@ func WritePacketWithPool(originSource N.PacketReader, destination N.PacketWriter
 		err = destination.WritePacket(buffer, packetBuffer.Destination)
 		N.PutPacketBuffer(packetBuffer)
 		if err != nil {
-			buffer.Leak()
+			buffer.Release()
 			if !notFirstTime {
 				err = N.ReportHandshakeFailure(originSource, err)
 			}
